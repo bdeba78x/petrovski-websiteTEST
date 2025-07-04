@@ -69,7 +69,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 0 20px;
-            z-index: 5; /* Второй план для "PETROVSKI.AI", "EN", кнопки темы */
+            z-index: 5; /* Фиксированный второй план */
         }
         .logo, #langToggleBtn, #themeToggleBtn {
             font-size: 18px;
@@ -95,7 +95,7 @@
             color: #333;
         }
         #themeToggleBtn:hover, #langToggleBtn:hover {
-            /* Без масштабирования, как было запрошено ранее */
+            /* Без масштабирования */
         }
         .welcome-screen, .container {
             text-align: center;
@@ -105,8 +105,8 @@
             border-radius: 15px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
             margin-top: 80px;
-            z-index: 10; /* Первый план для блоков */
-            position: relative; /* Убедимся, что z-index применяется корректно */
+            z-index: 10; /* Фиксированный первый план */
+            position: relative;
         }
         .dark-theme .welcome-screen, .dark-theme .container {
             background: rgba(255, 255, 255, 0.1);
@@ -325,7 +325,7 @@
                 downloadBtn: 'Завантажити зображення',
                 errorAuth: 'Будь ласка, увійдіть через Google для генерації зображень.',
                 errorPrompt: 'Будь ласка, введіть опис зображення.',
-                errorLang: 'Для кращої якості використовуйте англійську мову. Например, замість "кіт у космосі" напишіть "cat in space".',
+                errorLang: 'Для кращої якості використовуйте англійську мову. Наприклад, замість "кіт у космосі" напишіть "cat in space".',
                 errorApi: 'Виникла помилка: ',
                 poweredBy: 'Працює на Stability AI'
             },
