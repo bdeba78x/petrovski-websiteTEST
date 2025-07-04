@@ -71,7 +71,7 @@
             letter-spacing: 1px;
             color: #ffffff;
             transition: color 0.3s;
-            z-index: 1000;
+            z-index: 10; /* На второй план */
         }
         .light-theme .logo {
             color: #333;
@@ -88,10 +88,27 @@
             border-radius: 10px;
             cursor: pointer;
             transition: transform 0.2s;
-            z-index: 1000;
+            z-index: 10; /* На второй план */
         }
         #themeToggleBtn:hover {
             transform: scale(1.05);
+        }
+        #langToggleBtn {
+            position: fixed;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: transparent;
+            color: inherit;
+            padding: 5px 10px;
+            font-size: 12px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            z-index: 10; /* На второй план */
+        }
+        #langToggleBtn:hover {
+            transform: translateX(-50%) scale(1.05);
         }
         .welcome-screen, .container {
             text-align: center;
@@ -102,6 +119,7 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
             transition: background 0.3s, box-shadow 0.3s, color 0.3s;
             margin-top: 80px;
+            z-index: 20; /* На первый план */
         }
         .dark-theme .welcome-screen, .dark-theme .container {
             background: rgba(255, 255, 255, 0.1);
@@ -193,23 +211,6 @@
         #downloadBtn:hover {
             background-color: #218838;
             transform: scale(1.05);
-        }
-        #langToggleBtn {
-            position: fixed;
-            top: 5px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: transparent;
-            color: inherit;
-            padding: 5px 10px;
-            font-size: 12px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            z-index: 1000;
-        }
-        #langToggleBtn:hover {
-            transform: translateX(-50%) scale(1.05);
         }
         #result img {
             max-width: 70%;
@@ -389,7 +390,8 @@
             updateLanguage(currentLang);
         });
 
-        updateLanguage(currentLang);
+        // Устанавливаем английский язык при первой загрузке
+        updateLanguage('en');
 
         if (isAuthenticated) {
             welcomeScreen.style.display = 'none';
