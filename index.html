@@ -69,7 +69,15 @@
             justify-content: space-between;
             align-items: center;
             padding: 0 20px;
-            z-index: 5; /* Фиксированный второй план */
+            z-index: 5;
+            background: rgba(30, 30, 47, 0.9);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+        .header-controls.hidden {
+            opacity: 0;
+            pointer-events: none; /* Отключаем взаимодействие при скрытии */
         }
         .logo, #langToggleBtn, #themeToggleBtn {
             font-size: 18px;
@@ -91,6 +99,10 @@
         #langToggleBtn {
             transform: translateX(-40%) translateX(-11.4px);
         }
+        .light-theme .header-controls {
+            background: rgba(240, 240, 240, 0.9);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
         .light-theme .logo, .light-theme #langToggleBtn, .light-theme #themeToggleBtn {
             color: #333;
         }
@@ -103,9 +115,9 @@
             max-width: 900px;
             width: 100%;
             border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
             margin-top: 80px;
-            z-index: 10; /* Фиксированный первый план */
+            z-index: 10;
             position: relative;
         }
         .dark-theme .welcome-screen, .dark-theme .container {
@@ -114,7 +126,7 @@
         }
         .light-theme .welcome-screen, .light-theme .container {
             background: rgba(255, 255, 255, 0.8);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
             color: #333;
         }
         .welcome-screen h1, .container h1 {
@@ -299,6 +311,8 @@
         let isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
         const langToggleBtn = document.getElementById('langToggleBtn');
         let currentLang = localStorage.getItem('language') || 'en';
+        const headerControls = document.querySelector('.header-controls');
+        let lastScroll = 0;
 
         const translations = {
             ru: {
@@ -325,7 +339,7 @@
                 downloadBtn: 'Завантажити зображення',
                 errorAuth: 'Будь ласка, увійдіть через Google для генерації зображень.',
                 errorPrompt: 'Будь ласка, введіть опис зображення.',
-                errorLang: 'Для кращої якості використовуйте англійську мову. Наприклад, замість "кіт у космосі" напишіть "cat in space".',
+                errorLang: 'Для кращої якості використовуйте англійську мову. Например, замість "кіт у космосі" напишіть "cat in space".',
                 errorApi: 'Виникла помилка: ',
                 poweredBy: 'Працює на Stability AI'
             },
@@ -472,6 +486,17 @@
                 link.download = 'generated_image.png';
                 link.click();
             }
+        });
+
+        // Обработчик прокрутки для скрытия/показа header
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+            if (currentScroll > lastScroll && currentScroll > 50) {
+                headerControls.classList.add('hidden'); // Скрываем при прокрутке вниз
+            } else {
+                headerControls.classList.remove('hidden'); // Показываем при прокрутке вверх
+            }
+            lastScroll = currentScroll <= 0 ? 0 : currentScroll; // Сбрасываем на 0 при возврате в начало
         });
     </script>
 </body>
