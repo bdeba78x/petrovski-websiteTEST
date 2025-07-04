@@ -53,7 +53,6 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            transition: background 0.3s, color 0.3s;
             background: linear-gradient(135deg, #1e1e2f 0%, #2a2a4a 100%);
             color: #ffffff;
         }
@@ -61,54 +60,42 @@
             background: linear-gradient(135deg, #f0f0f0 0%, #d9e6ff 100%);
             color: #333;
         }
-        .logo {
+        .header-controls {
             position: fixed;
             top: 20px;
-            left: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            z-index: 10;
+        }
+        .logo, #langToggleBtn, #themeToggleBtn {
             font-size: 18px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: #ffffff;
-            transition: color 0.3s;
-            z-index: 10; /* На второй план */
-        }
-        .light-theme .logo {
-            color: #333;
-        }
-        #themeToggleBtn {
-            position: fixed;
-            top: 5px;
-            right: 20px;
-            background: transparent;
-            color: inherit;
             padding: 5px 10px;
-            font-size: 12px;
+            color: #ffffff;
+            background: transparent;
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            transition: transform 0.2s;
-            z-index: 10; /* На второй план */
         }
-        #themeToggleBtn:hover {
-            transform: scale(1.05);
+        .center-lang {
+            flex: 1;
+            display: flex;
+            justify-content: center;
         }
         #langToggleBtn {
-            position: fixed;
-            top: 5px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: transparent;
-            color: inherit;
-            padding: 5px 10px;
-            font-size: 12px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            z-index: 10; /* На второй план */
+            transform: translateX(-40%) translateX(-11.4px);
         }
-        #langToggleBtn:hover {
-            transform: translateX(-50%) scale(1.05);
+        .light-theme .logo, .light-theme #langToggleBtn, .light-theme #themeToggleBtn {
+            color: #333;
+        }
+        #themeToggleBtn:hover, #langToggleBtn:hover {
+            /* Убрано масштабирование, кнопка теперь не двигается */
         }
         .welcome-screen, .container {
             text-align: center;
@@ -117,13 +104,11 @@
             width: 100%;
             border-radius: 15px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            transition: background 0.3s, box-shadow 0.3s, color 0.3s;
             margin-top: 80px;
-            z-index: 20; /* На первый план */
+            z-index: 20;
         }
         .dark-theme .welcome-screen, .dark-theme .container {
             background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
             color: #ffffff;
         }
         .light-theme .welcome-screen, .light-theme .container {
@@ -162,7 +147,6 @@
             border-radius: 10px;
             border: 1px solid rgba(255, 255, 255, 0.2);
             resize: vertical;
-            transition: background 0.3s, color 0.3s, border 0.3s;
         }
         .dark-theme textarea {
             background: rgba(255, 255, 255, 0.05);
@@ -187,7 +171,6 @@
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            transition: transform 0.2s, background-color 0.2s;
             margin: 10px;
         }
         #generateBtn {
@@ -264,22 +247,34 @@
             color: #666;
         }
         @media (max-width: 600px) {
+            .header-controls {
+                top: 10px;
+                flex-direction: row;
+                justify-content: space-between;
+                width: 100%;
+                padding: 0 10px;
+            }
+            .logo, #langToggleBtn, #themeToggleBtn {
+                font-size: 14px;
+                padding: 5px 8px;
+            }
             .welcome-screen, .container { padding: 20px; }
             textarea { height: 100px; font-size: 14px; }
             button { padding: 10px 20px; font-size: 14px; }
             h1 { font-size: 24px; }
             p { font-size: 14px; }
-            .logo { font-size: 14px; top: 10px; left: 10px; }
-            #themeToggleBtn { top: 5px; right: 10px; font-size: 10px; }
-            #langToggleBtn { font-size: 10px; }
             .attribution { font-size: 10px; }
         }
     </style>
 </head>
 <body class="dark-theme">
-    <div class="logo">Petrovski.AI</div>
-    <button id="themeToggleBtn">🌙</button>
-    <button id="langToggleBtn">EN</button>
+    <div class="header-controls">
+        <div class="logo">Petrovski.AI</div>
+        <div class="center-lang">
+            <button id="langToggleBtn">EN</button>
+        </div>
+        <button id="themeToggleBtn">🌙</button>
+    </div>
     <div id="g_id_onload" data-client_id="833606171828-i81sn025te6dlks0mt7i309q3empnfoi.apps.googleusercontent.com" data-callback="handleCredentialResponse" data-auto_prompt="false"></div>
     <div class="welcome-screen">
         <h1>Welcome!</h1>
@@ -299,8 +294,7 @@
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script>
         const themeToggleBtn = document.getElementById('themeToggleBtn');
-        const welcomeScreen = document.querySelector('.welcome-screen');
-        const container = document.querySelector('.container');
+        const body = document.body;
         let isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
         const langToggleBtn = document.getElementById('langToggleBtn');
         let currentLang = localStorage.getItem('language') || 'en';
@@ -369,8 +363,8 @@
             if (idToken) {
                 isAuthenticated = true;
                 localStorage.setItem('isAuthenticated', 'true');
-                welcomeScreen.style.display = 'none';
-                container.style.display = 'block';
+                document.querySelector('.welcome-screen').style.display = 'none';
+                document.querySelector('.container').style.display = 'block';
                 console.log('Logged in, isAuthenticated set to:', isAuthenticated);
                 document.getElementById('generateBtn').disabled = false;
             } else {
@@ -379,9 +373,10 @@
         }
 
         themeToggleBtn.addEventListener('click', () => {
-            document.body.classList.toggle('dark-theme');
-            document.body.classList.toggle('light-theme');
-            themeToggleBtn.textContent = document.body.classList.contains('dark-theme') ? '🌙' : '☀️';
+            const isDark = body.classList.contains('dark-theme');
+            body.classList.remove('dark-theme', 'light-theme');
+            body.classList.add(isDark ? 'light-theme' : 'dark-theme');
+            themeToggleBtn.textContent = isDark ? '☀️' : '🌙';
         });
 
         langToggleBtn.addEventListener('click', () => {
@@ -390,12 +385,11 @@
             updateLanguage(currentLang);
         });
 
-        // Устанавливаем английский язык при первой загрузке
         updateLanguage('en');
 
         if (isAuthenticated) {
-            welcomeScreen.style.display = 'none';
-            container.style.display = 'block';
+            document.querySelector('.welcome-screen').style.display = 'none';
+            document.querySelector('.container').style.display = 'block';
             document.getElementById('generateBtn').disabled = false;
         }
 
